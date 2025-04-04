@@ -1,8 +1,9 @@
-
 const fetch = require("node-fetch");
 
 exports.handler = async function(event) {
   try {
+    console.log("BODY RECIBIDO:", event.body); // 👈 agrega esto
+
     const { prompt } = JSON.parse(event.body);
 
     const response = await fetch("https://aderesopablo.app.n8n.cloud/webhook/generacionblog", {
