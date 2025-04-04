@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Generador de Blogs con IA</title>
+  <style>
+    body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f3f3f3; }
+    .container { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.1); width: 400px; }
+    textarea { width: 100%; height: 120px; margin-top: 10px; }
+    button { margin-top: 10px; background: rebeccapurple; color: white; padding: 10px; border: none; cursor: pointer; border-radius: 6px; }
+    p { margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>📝 Generador de Blogs con IA</h2>
+    <form id="blogForm">
+      <label for="prompt">¿Sobre qué quieres escribir?</label>
+      <textarea id="prompt" name="prompt" placeholder="Ej: Escribe un blog sobre salud mental y trabajo remoto"></textarea>
+      <button type="submit">Generar blog</button>
+      <p id="mensaje"></p>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("blogForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const prompt = document.getElementById("prompt").value;
+
+      fetch("/.netlify/functions/enviarPrompt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt })
+      })
+      .then(res => res.ok ? res.json() : Promise.reject(res))
+      .then(data => {
+        document.getElementById("mensaje").innerText = "✅ Blog generado y enviado correctamente a WordPress.";
+        console.log(data);
+      })
+      .catch(err => {
+        document.getElementById("mensaje").innerText = "⚠️ Error al generar el blog. Revisa la consola.";
+        console.error(err);
+      });
+    });
+  </script>
+</body>
+</html>
